@@ -1,18 +1,21 @@
 package com.example.lab08teo;
+
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
+
 import java.util.List;
 
 @Dao
 public interface PinturaDao {
     @Insert
-    void insert(Pintura pintura); // Asegúrate de que esté anotado con @Insert
+    void insert(Pintura... pinturas);
 
-    @Query("SELECT Pintura.titulo, Autor.nombre, Autor.apellido, Pintura.tecnica, Pintura.categoria, Pintura.descripcion, Pintura.anio, Pintura.imagen " +
-            "FROM Pintura " +
-            "INNER JOIN Autor ON Pintura.autorId = Autor.id")
-    List<PinturaAutor> getPinturasConAutor();
+    @Query("SELECT PINTURA.titulo, AUTOR.nombre || ' ' || AUTOR.apellido as autorNombre, PINTURA.tecnica, PINTURA.categoria, PINTURA.descripcion, PINTURA.anio, PINTURA.enlace " +
+            "FROM PINTURA INNER JOIN AUTOR ON PINTURA.autorId = AUTOR.id")
+    List<PinturaDescription> getPinturaDescriptions();
 
-    List<PinturaAutor> getPinturaAutor();
+    @Query("SELECT SALA.nombre, PINTURA.titulo, AUTOR.nombre || ' ' || AUTOR.apellido as autorNombre, PINTURA.enlace " +
+            "FROM PINTURA INNER JOIN SALA ON PINTURA.salaId = SALA.id INNER JOIN AUTOR ON PINTURA.autorId = AUTOR.id")
+    List<PinturaMap> getPinturaMaps();
 }
